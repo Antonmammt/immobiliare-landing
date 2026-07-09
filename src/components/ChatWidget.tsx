@@ -13,9 +13,10 @@ interface Message {
 interface ChatWidgetProps {
   agenteName: string;
   agenteSlug: string;
+  avatarUrl?: string;
 }
 
-export default function ChatWidget({ agenteName, agenteSlug }: ChatWidgetProps) {
+export default function ChatWidget({ agenteName, agenteSlug, avatarUrl }: ChatWidgetProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
   const [sessionId, setSessionId] = useState<string>("");
@@ -150,22 +151,24 @@ export default function ChatWidget({ agenteName, agenteSlug }: ChatWidgetProps) 
   };
 
   return (
-    <div className="w-full max-w-md bg-white rounded-2xl shadow-xl overflow-hidden border border-slate-200/80 flex flex-col h-[600px] md:h-[650px]">
+    <div className="w-full max-w-md bg-white md:rounded-2xl md:shadow-xl md:border md:border-slate-200/80 overflow-hidden flex flex-col h-dvh md:h-[650px]">
       
-      {/* WhatsApp-Style Header */}
-      <div className="bg-[#075e54] text-white px-4 py-3 flex items-center justify-between shadow-md z-10">
+      {/* WhatsApp-Style Header - fixed on mobile */}
+      <div className="bg-[#075e54] text-white px-4 py-3 flex items-center justify-between shadow-md z-10 shrink-0">
         <div className="flex items-center space-x-3">
           {/* Avatar with status indicator */}
           <div className="relative">
-            <div className="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-[#075e54] font-bold text-lg shadow-inner">
-              {agenteName.charAt(0).toUpperCase()}
-            </div>
+            {avatarUrl ? (
+              <img src={avatarUrl} alt={agenteName} className="w-10 h-10 rounded-full object-cover shadow-inner" />
+            ) : (
+              <img src="/avatar-default.svg" alt={agenteName} className="w-10 h-10 rounded-full shadow-inner" />
+            )}
             <span className="absolute bottom-0 right-0 block h-3 w-3 rounded-full bg-[#25d366] ring-2 ring-emerald-800" />
           </div>
           
           <div>
             <h3 className="font-semibold text-sm leading-tight text-white">{agenteName}</h3>
-            <span className="text-xs text-emerald-100 opacity-90">Online • Assistente AI</span>
+            <span className="text-xs text-emerald-100 opacity-90">Online</span>
           </div>
         </div>
         
@@ -225,14 +228,17 @@ export default function ChatWidget({ agenteName, agenteSlug }: ChatWidgetProps) 
           );
         })}
 
-        {/* Typing Indicator */}
+        {/* Typing Indicator - WhatsApp style */}
         {isTyping && (
           <div className="self-start flex flex-col max-w-[80%] items-start animate-fade-in">
-            <div className="px-4 py-3 rounded-xl bg-white text-slate-800 rounded-tl-none shadow-sm relative flex items-center space-x-1">
+            <div className="px-4 py-2.5 rounded-xl bg-white text-slate-800 rounded-tl-none shadow-sm relative flex items-center space-x-2">
               <div className="absolute top-0 left-[-4px] bg-white w-2 h-2.5 [clip-path:polygon(100%_0,0_0,100%_100%)]" />
-              <div className="w-2.5 h-2.5 bg-slate-400 rounded-full animate-bounce-custom" />
-              <div className="w-2.5 h-2.5 bg-slate-400 rounded-full animate-bounce-custom delay-200" />
-              <div className="w-2.5 h-2.5 bg-slate-400 rounded-full animate-bounce-custom delay-400" />
+              <div className="flex items-center space-x-1">
+                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce-custom" />
+                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce-custom delay-200" />
+                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce-custom delay-400" />
+              </div>
+              <span className="text-xs text-slate-500 italic font-medium">sta scrivendo...</span>
             </div>
           </div>
         )}
@@ -241,27 +247,28 @@ export default function ChatWidget({ agenteName, agenteSlug }: ChatWidgetProps) 
       </div>
 
       {/* Chat Input Field Container */}
-      <form onSubmit={handleSendMessage} className="bg-[#f0f2f5] px-4 py-3 flex items-center space-x-2 border-t border-slate-200">
+      <form onSubmit={handleSendMessage} className="bg-[#f0f2f5] px-3 py-2 flex flex-col shrink-0 border-t border-slate-200">
+        <div className="flex items-center space-x-2">
+          <input
+            ref={inputRef}
+            type="text"
+            value={inputValue}
+            onChange={(e) => setInputValue(e.target.value)}
+            placeholder="Scrivi un messaggio..."
+            disabled={isTyping}
+            className="flex-1 bg-white border border-slate-200 rounded-full py-2.5 px-4 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:border-emerald-600 text-slate-800 placeholder-slate-400 transition-all disabled:opacity-80"
+          />
 
+          <button
+            type="submit"
+            disabled={!inputValue.trim() || isTyping}
+            className="bg-[#075e54] text-white p-2.5 rounded-full hover:bg-[#128c7e] active:scale-95 transition-all flex items-center justify-center cursor-pointer disabled:opacity-40 disabled:pointer-events-none shadow-sm shrink-0"
+            aria-label="Send message"
+          >
+            <Send size={18} />
+          </button>
+        </div>
 
-        <input
-          ref={inputRef}
-          type="text"
-          value={inputValue}
-          onChange={(e) => setInputValue(e.target.value)}
-          placeholder="Scrivi un messaggio..."
-          disabled={isTyping}
-          className="flex-1 bg-white border border-slate-200 rounded-full py-2.5 px-4 text-sm focus:outline-none focus:ring-1 focus:ring-emerald-600 focus:border-emerald-600 text-slate-800 placeholder-slate-400 transition-all disabled:opacity-80"
-        />
-
-        <button
-          type="submit"
-          disabled={!inputValue.trim() || isTyping}
-          className="bg-[#075e54] text-white p-2.5 rounded-full hover:bg-[#128c7e] active:scale-95 transition-all flex items-center justify-center cursor-pointer disabled:opacity-40 disabled:pointer-events-none shadow-sm"
-          aria-label="Send message"
-        >
-          <Send size={18} className="ml-0.5" />
-        </button>
       </form>
     </div>
   );

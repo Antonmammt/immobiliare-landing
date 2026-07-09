@@ -2,13 +2,13 @@
 
 import React, { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import Link from "next/link";
 import ChatWidget from "@/components/ChatWidget";
 
 // Inner component that reads searchParams (needs Suspense)
 function MainLandingContent() {
   const searchParams = useSearchParams();
   const agenteParam = searchParams.get("agente");
+  const avatarParam = searchParams.get("avatar");
 
   // Format the agent name from slug (e.g., "mario-rossi" -> "Mario Rossi")
   const formatAgenteName = (slug: string | null): string => {
@@ -23,35 +23,21 @@ function MainLandingContent() {
   const agenteName = formatAgenteName(agenteParam);
 
   return (
-    <main className="flex flex-col items-center justify-between min-h-screen p-4 md:p-8 bg-slate-50 md:bg-slate-100/50">
-      {/* Header Container */}
-      <div className="w-full max-w-md text-center mt-4 md:mt-8 mb-4">
-        <h1 className="text-xl md:text-2xl font-bold text-slate-800 tracking-tight leading-snug">
+    <main className="flex flex-col items-center justify-between min-h-dvh bg-slate-50 md:bg-slate-100/50 md:p-8">
+      {/* Header Container - hidden on mobile, visible on desktop */}
+      <div className="hidden md:block w-full max-w-md text-center md:mt-8 mb-4">
+        <h1 className="md:text-2xl font-bold text-slate-800 tracking-tight leading-snug">
           Parla con l&apos;assistente virtuale di{" "}
           <span className="text-[#075e54]">{agenteName}</span>
         </h1>
-        <p className="text-xs md:text-sm text-slate-500 mt-1.5 font-medium">
-          Disponibile 24/7 • Risposte immediate per la tua ricerca immobiliare
-        </p>
       </div>
 
       {/* Chat Widget Container */}
-      <div className="w-full flex justify-center flex-1 md:flex-initial mb-3">
-        <ChatWidget agenteName={agenteName} agenteSlug={agenteSlug} />
+      <div className="w-full flex justify-center flex-1 md:flex-initial">
+        <ChatWidget agenteName={agenteName} agenteSlug={agenteSlug} avatarUrl={avatarParam || undefined} />
       </div>
 
-      {/* Footer / Privacy Note */}
-      <div className="w-full max-w-md text-center mb-4 mt-1">
-        <p className="text-[11px] md:text-xs text-slate-500">
-          Proseguendo accetti la nostra{" "}
-          <Link
-            href="/privacy"
-            className="text-[#075e54] hover:underline font-semibold"
-          >
-            privacy policy
-          </Link>
-        </p>
-      </div>
+
     </main>
   );
 }
