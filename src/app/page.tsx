@@ -23,7 +23,7 @@ function MainLandingContent() {
   const agenteName = formatAgenteName(agenteParam);
 
   return (
-    <main className="flex flex-col items-center justify-between min-h-dvh bg-slate-50 md:bg-slate-100/50 md:p-8">
+    <main className="flex flex-col items-center justify-between md:justify-center min-h-dvh bg-slate-50 md:bg-slate-100/50 md:p-8">
       {/* Header Container - hidden on mobile, visible on desktop */}
       <div className="hidden md:block w-full max-w-md text-center md:mt-8 mb-4">
         <h1 className="md:text-2xl font-bold text-slate-800 tracking-tight leading-snug">
