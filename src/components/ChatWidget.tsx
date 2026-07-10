@@ -57,7 +57,7 @@ export default function ChatWidget({ agenteName, agenteSlug, avatarUrl }: ChatWi
     setMessages([
       {
         id: "welcome",
-        text: `Ciao! Sono l'assistente virtuale di ${agenteName}. Come posso aiutarti oggi a trovare o valutare la tua casa dei sogni?`,
+        text: `Ciao! Sono l'assistente virtuale di ${agenteName}. Come posso aiutarti?`,
         sender: "bot",
         timestamp: getFormattedTime(),
       },
