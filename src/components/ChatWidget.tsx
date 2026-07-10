@@ -235,9 +235,9 @@ export default function ChatWidget({ agenteName, agenteSlug, avatarUrl }: ChatWi
               <div className="absolute top-0 left-[-4px] bg-white w-2 h-2.5 [clip-path:polygon(100%_0,0_0,100%_100%)]" />
               <span className="text-xs text-slate-500 italic font-medium">sta scrivendo</span>
               <div className="flex items-center space-x-1">
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce-custom delay-400" />
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce-custom delay-200" />
-                <div className="w-2 h-2 bg-slate-400 rounded-full animate-bounce-custom" />
+                <div className="w-3 h-3 bg-slate-400 rounded-full animate-bounce-custom delay-400" />
+                <div className="w-3 h-3 bg-slate-400 rounded-full animate-bounce-custom delay-200" />
+                <div className="w-3 h-3 bg-slate-400 rounded-full animate-bounce-custom" />
               </div>
             </div>
           </div>
