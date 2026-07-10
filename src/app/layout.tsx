@@ -4,6 +4,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "Assistente Immobiliare Virtuale",
   description: "Parla con il nostro assistente virtuale, disponibile 24/7 per la qualificazione dei lead immobiliari.",
+  icons: [{ rel: "icon", url: "/favicon.svg", type: "image/svg+xml" }],
 };
 
 export default function RootLayout({
