@@ -16,44 +16,33 @@ interface ChatWidgetProps {
   avatarUrl?: string;
 }
 
+function generateUUID(): string {
+  if (typeof window !== "undefined" && window.crypto && typeof window.crypto.randomUUID === "function") {
+    return window.crypto.randomUUID();
+  }
+  return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
+    const r = (Math.random() * 16) | 0;
+    const v = c === "x" ? r : (r & 0x3) | 0x8;
+    return v.toString(16);
+  });
+}
+
 export default function ChatWidget({ agenteName, agenteSlug, avatarUrl }: ChatWidgetProps) {
   const [messages, setMessages] = useState<Message[]>([]);
   const [inputValue, setInputValue] = useState("");
-  const [sessionId, setSessionId] = useState<string>("");
+  const [sessionId] = useState(generateUUID);
   const [isTyping, setIsTyping] = useState(false);
-  
+
   const chatEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  // Helper function to get current time in HH:MM format
   const getFormattedTime = () => {
     const now = new Date();
     return now.toLocaleTimeString("it-IT", { hour: "2-digit", minute: "2-digit" });
   };
 
-  // Helper function to generate UUID
-  const generateUUID = (): string => {
-    if (typeof window !== "undefined" && window.crypto && typeof window.crypto.randomUUID === "function") {
-      return window.crypto.randomUUID();
-    }
-    return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, (c) => {
-      const r = (Math.random() * 16) | 0;
-      const v = c === "x" ? r : (r & 0x3) | 0x8;
-      return v.toString(16);
-    });
-  };
-
-  // Initialize Session ID and Welcome Message
+  // Initialize Welcome Message on mount
   useEffect(() => {
-    // Generate/retrieve Session ID from sessionStorage
-    let savedSessionId = sessionStorage.getItem("real_estate_chat_session_id");
-    if (!savedSessionId) {
-      savedSessionId = generateUUID();
-      sessionStorage.setItem("real_estate_chat_session_id", savedSessionId);
-    }
-    setSessionId(savedSessionId);
-
-    // Initial welcome message
     setMessages([
       {
         id: "welcome",
